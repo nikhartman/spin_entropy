@@ -88,17 +88,14 @@ def xy_to_meshgrid(x,y):
 ### LINE SHAPES ###
 ###################
 
+MU_B = 5.7883818012e-5 # eV/T
+K_B = 8.6173303e-5 # eV/K
+
 def line(x, a, b):
     return a*x + b
 
 def parabola(x, a, b, c):
     return a*x**2 + b*x + c
-
-def cubic(x, a, b, c, d):
-    return a*x**3 + b*x**2 + c*x + d
-
-def quadratic(x, a, b, c, d, e):
-    return a*x**4 + b*x**3 + c*x**2 + d*x + e
 
 def i_sense(x, x0, beta, i0, i1, i2):
     """ fit to sensor current """
@@ -109,6 +106,16 @@ def di_sense_simple(x, x0, beta, di0, di2, delta):
 
     arg = (x-x0)/beta
     return -(0.5)*di0*(arg+delta)*(np.cosh(arg)**-2) + di2
+
+def p_up(field, temp, g, de):
+    return 1/(1+np.exp(-(g*MU_B*field-de)/(K_B*temp)))
+
+def p_down(field, temp, g, de):
+    return 1/(1+np.exp(+(g*MU_B*field-de)/(K_B*temp)))
+
+def gibbs_entropy(field, a, b, temp, g, de):
+    return a*(-p_up(field, temp, g, de)*np.log(p_up(field, temp, g, de)) \
+            -p_down(field, temp, g, de)*np.log(p_down(field, temp, g, de))) + b
 
 #############
 ### LINES ###
