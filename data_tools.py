@@ -105,6 +105,11 @@ def i_sense(x, x0, beta, i0, i1, i2):
     arg = (x-x0)/beta
     return -i0*np.tanh(arg) + i1*(x-x0) + i2
 
+def di_sense_simple(x, x0, beta, di0, di2, delta):
+
+    arg = (x-x0)/beta
+    return -(0.5)*di0*(arg+delta)*(np.cosh(arg)**-2) + di2
+
 #############
 ### LINES ###
 #############
@@ -221,5 +226,102 @@ def i_sense_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, 
                       0.1, z[i,ilow[i]:ihigh[i]].mean()]
             bounds = [(x0bounds[0], 0.2, 0.001, 0.0, 0.0), (x0bounds[1], 10.0, 10.0, 10.0, 20.0)]
             df.loc[i], _ = curve_fit(i_sense, x[i,ilow[i]:ihigh[i]], z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
+                          
+    return df
+
+def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix = None, span = None):
+    
+    def di_dataset(params, i, xx):
+        """ Weak localization peak fitting function. Adapted from Igor code. """
+        
+        x0 = params['x0_{0:d}'.format(i)]
+        beta = params['beta_{0:d}'.format(i)]
+        di0 = params['di0_{0:d}'.format(i)]
+        di2 = params['di2_{0:d}'.format(i)]
+        delta = params['delta_{0:d}'.format(i)]
+        
+        return di_sense_simple(xx, x0, beta, di0, di2, delta)
+    
+    def di_objective(params, xx, zz, idx0, idx1):
+        """ calculate total residual for fits to several data sets held
+            in a 2-D array, and modeled by Gaussian functions"""
+        
+        n,m = zz.shape
+        resid = []
+        # make residual per data set
+        for i in range(n):
+            resid.append(zz[i,idx0[i]:idx1[i]] - di_dataset(params, i, x[i,idx0[i]:idx1[i]]))
+        # now flatten this to a 1D array, as minimize() needs
+        return np.concatenate(resid)
+    
+    # get the dimensions of z
+    if(z.ndim==1):
+        m = len(z)
+        n = 1
+        z.shape = (n,m)
+    elif(z.ndim==2):
+        n,m = z.shape
+    else:
+        raise ValueError('the shape of zarray is wrong')
+    
+    # deal with the shape of x
+    # should have a number of rows = 1 or number of rows = len(z)
+    
+    if(x.ndim==1 or x.shape[0]==1):
+        x = np.tile(x, (n,1))
+    elif(x.shape[0]==n):
+        pass
+    else:
+        raise ValueError('the shape of xarray is wrong')
+        
+    if(span):
+        icenters = np.nanargmin(np.abs(x.transpose()-centers), axis=0)
+        ilow = np.nanargmin(np.abs(x.transpose()-(centers-span)), axis=0)
+        ihigh = np.nanargmin(np.abs(x.transpose()-(centers+span)), axis=0)
+    else:
+        ilow = np.zeros(n, dtype=np.int)
+        ihigh = -1*np.ones(n, dtype=np.int)
+    
+    columns = ['x0', 'beta', 'di0', 'di2', 'delta']
+    df = pd.DataFrame(columns=columns)
+    
+    # add constraints specified in the 'constrain' list
+    if(constrain or fix):
+        
+        # create parameters, one per data set
+        fit_params = Parameters()
+
+        for i in range(n):
+            fit_params.add('x0_{0:d}'.format(i), value=centers[i], min=x0bounds[0], max=x0bounds[1])
+            fit_params.add('beta_{0:d}'.format(i), value=widths[i], min=0.2, max=10.0)
+            fit_params.add('di0_{0:d}'.format(i), 
+                               value=max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())), min=0.0, max=0.5)
+            fit_params.add('di2_{0:d}'.format(i), value=(z[i,ilow[i]]+z[i,ihigh[i]])/2.0, min=-0.01, max=0.01)
+            fit_params.add('delta_{0:d}'.format(i), value=0.0, min=-2.0, max=2.0)
+
+        if(constrain):
+            for p in constrain:
+                for i in range(1,n):
+                    fit_params['{0}_{1:d}'.format(p,i)].expr = '{0}_{1:d}'.format(p,0)
+                    
+        if(fix):
+            for p in fix:
+                for i in range(n):
+                    fit_params['{0}_{1:d}'.format(p,i)].vary = False
+                    
+        # run the global fit to all the data sets
+        m = minimize(di_objective, fit_params, args=(x, z, ilow, ihigh))
+    
+        valdict = m.params.valuesdict()
+        for i in range(n):
+            df.loc[i] = [valdict['{0}_{1:d}'.format(c, i)] for c in columns]
+    else:
+        # no parameters need to be fixed between data sets
+        # fit them all separately (much faster)
+        for i in range(n):
+            p0 = [centers[i], widths[i], max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())),
+                  (z[i,ilow[i]]+z[i,ihigh[i]])/2.0, 0.0]
+            bounds = [(x0bounds[0], 0.2, 0.0, -0.05, -2.0), (x0bounds[1], 10.0, 0.5, 0.05, 2.0)]
+            df.loc[i], _ = curve_fit(di_sense_simple, x[i,ilow[i]:ihigh[i]], z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
                           
     return df
