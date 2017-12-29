@@ -1,3 +1,6 @@
+# ignore LaTeX directory
+paper/
+
 # apple nonsense
 .DS_Store
 
