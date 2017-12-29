@@ -1,6 +1,8 @@
 """ Analysis tools for spin entropy paper """
 
 import os
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import h5py
@@ -15,6 +17,69 @@ from lmfit import Model, Parameters, minimize, fit_report
 def open_hdf5(dat, path=''):
     fullpath = os.path.join(path, 'dat{0:d}.h5'.format(dat))
     return h5py.File(fullpath, 'r')
+
+################
+### PLOTTING ###
+################
+
+def mm2inch(*tupl):
+    inch = 25.4
+    if isinstance(tupl[0], tuple):
+        return tuple(i/inch for i in tupl[0])
+    else:
+        return tuple(i/inch for i in tupl)
+
+def shiftedColorMap(cmap, start=0, midpoint=0.5, stop=1.0, name='shiftedcmap'):
+    # credit:  https://gist.github.com/phobson/7916777
+    
+    '''
+    Function to offset the "center" of a colormap. Useful for
+    data with a negative min and positive max and you want the
+    middle of the colormap's dynamic range to be at zero
+    
+    Input
+    -----
+      cmap : The matplotlib colormap to be altered
+      start : Offset from lowest point in the colormap's range.
+          Defaults to 0.0 (no lower ofset). Should be between
+          0.0 and 1.0.
+      midpoint : The new center of the colormap. Defaults to 
+          0.5 (no shift). 
+      stop : Offset from highets point in the colormap's range.
+          Defaults to 1.0 (no upper ofset). Should be between
+          0.0 and 1.0.
+    '''
+    cdict = {
+        'red': [],
+        'green': [],
+        'blue': [],
+        'alpha': []
+    }
+      
+    # regular index to compute the colors
+    reg_index = np.linspace(start, stop, 257)
+
+    # shifted index to match the data
+    shift_index = np.hstack([
+        np.linspace(0.0, midpoint, 128, endpoint=False), 
+        np.linspace(midpoint, 1.0, 129, endpoint=True)
+    ])
+    
+    for ri, si in zip(reg_index, shift_index):
+        r, g, b, a = cmap(ri)
+
+        cdict['red'].append((si, r, r))
+        cdict['green'].append((si, g, g))
+        cdict['blue'].append((si, b, b))
+        cdict['alpha'].append((si, a, a))
+        
+    newcmap = mpl.colors.LinearSegmentedColormap(name, cdict)
+    plt.register_cmap(cmap=newcmap)
+
+    return newcmap
+
+def add_subplot_id(ax, id_lttr, loc, fontsize=18):
+    ax.text(*loc, '({0:s})'.format(id_lttr), transform=ax.transAxes, fontsize=fontsize)
 
 #########################
 ### DATA MANIPULATION ###
@@ -103,7 +168,7 @@ def i_sense(x, x0, beta, i0, i1, i2):
     return -i0*np.tanh(arg) + i1*(x-x0) + i2
 
 def di_sense_simple(x, x0, beta, di0, di2, delta):
-
+    """ fit charge sensor lock in signal """
     arg = (x-x0)/beta
     return -(0.5)*di0*(arg+delta)*(np.cosh(arg)**-2) + di2
 
