@@ -17,7 +17,6 @@ font.sans-serif: Helvetica
 text.usetex: False
 font.size: 14
 axes.labelsize: 14
-legend.fontsize: 14
 xtick.labelsize: 12
 ytick.labelsize: 12
 # mpl.rcParams['axes.labelsize'] = 13
@@ -26,6 +25,13 @@ ytick.labelsize: 12
 # mpl.rcParams['xtick.labelsize'] = 13
 # mpl.rcParams['ytick.labelsize'] = 13
 mathtext.default: regular
+    
+# legends
+legend.frameon: False
+legend.fontsize: 14
+legend.handletextpad: 0.25
+legend.handlelength: 1.5
+legend.borderaxespad : 0.25
 
 # maybe needed to avoid Type 3 fonts
 pdf.fonttype: 42
