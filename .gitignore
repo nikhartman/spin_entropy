@@ -1,5 +1,10 @@
 # ignore LaTeX directory
-paper/
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.pdf
+paper/*.gz
+paper/*.out
 
 # apple nonsense
 .DS_Store
