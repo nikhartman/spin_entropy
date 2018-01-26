@@ -5,6 +5,7 @@ paper/*.log
 paper/*.pdf
 paper/*.gz
 paper/*.out
+paper/*.aux
 
 # apple nonsense
 .DS_Store
