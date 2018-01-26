@@ -72,7 +72,7 @@ where $\Gamma$ is a coupling constant and $g_{N/N+1}$ are the degeneracies of th
 %%% fab/measurement details %%%
 The device was built on a AlGaAs/GaAs heterostructure, hosting a 2D electron gas with density and mobility at \SI{300}{\milli\kelvin} (determined on a separate chip) of \SI{2.42e11}{\per\square\centi\metre} and \SI[per-mode=symbol]{2.56e6}{\square\centi\metre\per\volt\per\second}.   Mesas and NiAuGe ohmic contacts to the 2DEG were defined by standard photolithography techniques, then \SI{10}{\nano\metre} of $\mathrm{HfO_2}$ was deposited via atomic layer deposition to improve the gating stability to the device. Electron beam lithography followed by evaporation of \SI{20}{\nano\metre} of Ti/Au defined the fine gate structures, including the \SI{200}{\nano\metre} diameter quantum dots. The measurement was carried out in an dilution refrigerator with a base temperature of \SI{14}{\milli\kelvin}.
 
-%%%%%%%%%%  current edits end here  %%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 %%% figure 2 %%%
 \begin{figure}[!]
@@ -80,7 +80,11 @@ The device was built on a AlGaAs/GaAs heterostructure, hosting a 2D electron gas
         \caption{\label{fig:fig2}(a) Charge sensor data for $N=0 \rightarrow 1$ at 100 and 160mK. Temperature is set by DC current through the QPC heater. (b) Derivative of the charge sensor signal with $dT \sim 60mK$. Fits to $dg$ are shown with $\delta$ as a free parameter (solid) and $\delta=0$ (dashed) (c) Transition width, $\Theta$, as a fucntion of mixing chamber temperature. The highlighted, linear region is where all the data discussed were measured. Fitting a straight line to this data, the lever arm $\alpha$ is calculated. (d) $\Theta$ as a function of DC current through the QPC heater. The linear fit is used to convert between $I_{heat}$ and $dT$, with $R_{QPC}$ fixed at 20$k\Omega$ (e) Change in entropy as a function of AC current through the QPC heater. Top axis shows corresponding $dT$. (f) Raw data from which $dS / k_B$ in (c), and the line cut in (b) were extracted.}
 \end{figure}
 
-To make a  measurement of the quantum dot entropy, the right dot was coupled to the reservoir on the source (left) side, with the drain (right) side of the dot closed. The charge sensing QPC  was tuned to a conductance of ${\sim}e^2/h$. A small DC voltage bias was applied and the measured current was used to calculate the sensor conductance.  Assuming the source barrier is in the limit where single electron transitions ($\Gamma_{In/Out}$) are only broadened by the temperature of the reservoir (discussed further in Fig. \ref{fig:fig2}c, the charge sensor conductance takes the form,
+%%% device setup %%%
+Using the gates on the right hand side of Fig~\ref{fig:fig1}a, the quantum dot was tuned such that there is a weak tunnel coupling to the reservoir on the source side with the drain side of the dot closed. The charge sensing QPC was tuned to a conductance of ${\sim}e^2/h$. A small DC voltage bias was applied across the QPC and the measured current was used to calculate the sensor conductance. The reservoir temperature was controlled either by varying the fridge temperature or by Joule heating through the QPC on the left side of the channel. In the latter case, the QPC was fixed at \SI{20}{\kilo\ohms} and biased using an AC or DC current source. The Joule heating strategy gives fast control of the temperature (up to \SI{100}{\hertz}) while keeping the voltage drop across the reservoir negligably small.
+
+%%% figs 2a and b %%%
+Assuming the source barrier is in the limit where single electron transitions ($\Gamma_{In/Out}$) are only broadened by the temperature of the reservoir (discussed further in Fig. \ref{fig:fig2}c, the charge sensor conductance takes the form,
 %
 \begin{align}
 \label{eqn:g}
@@ -90,7 +94,8 @@ To make a  measurement of the quantum dot entropy, the right dot was coupled to 
 %
 where $\Theta = \frac{k_B T}{\alpha e}$, $\alpha$ is the lever arm for the quantum dot plunger gate, and $G_1$ is determined by the cross capacitance between the sensor gates and the plunger gate.
 
-The temperature of the electron reservoir was varied by applying an AC current through the heating QPC on the left side of the channel. Fluctuations in $g_{sens}$ were measured at $2f_{Heat}$ using a lock-in amplifier; the temperature of the reservoir goes as $dT^2 \sim P^{AC}_{Heat} \sim \sin^2(2\omega t)$. Taking a derivative of Eq. \ref{eqn:g} with respect to temperature gives the change in conductance, $dg_{sens}$, as measured by the lock-in amplifier,
+%%% figs 2c and d%%%
+Fluctuations in $g_{sens}$ were measured at $2f_{Heat}$ using a lock-in amplifier; the temperature of the reservoir goes as $dT^2 \sim P^{AC}_{Heat} \sim \sin^2(2\omega t)$. Taking a derivative of Eq. \ref{eqn:g} with respect to temperature gives the change in conductance, $dg_{sens}$, as measured by the lock-in amplifier,
 %
 \begin{align}
 \label{eqn:dg}
