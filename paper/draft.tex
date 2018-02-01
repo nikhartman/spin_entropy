@@ -1,3 +1,8 @@
+% pull in josh's changes 
+% print and edit
+% edit figs 3 and 4 text
+% edit conclusion
+
 \documentclass[twocolumn,showpacs,preprintnumbers,amsmath,amssymb,pra,aps,superscriptaddress]{revtex4-1}
 
 \usepackage{graphicx}
@@ -65,15 +70,19 @@ Any entropy change from the $N$ to $N+1$ ground states of the dot should shift t
 An explanation based on detailed balance is helpful in understanding how the shift in $\mu_{N+1}$ with respect to $E_F$ upon heating relates to entropy.   In general, electrons tunnel back and forth between the dot and reservoir as long as $\mu_{N+1}$ is within thermal broadening of Fermi level, that is, as long as there are available states in both the dot and the reservoir.  The tunnel rates into and out of the dot, $\Gamma_{in}=\Gamma_{N\rightarrow N+1}$ and $\Gamma_{out}=\Gamma_{N+1\rightarrow N}$, depend on degeneracy of the $N$ and $N+1$ levels.  Consider the filling of the first electron state at zero magnetic field, a state with a single, unpaired spin-$\frac{1}{2}$ and therefore a degeneracy of 2. An electron tunneling into this state has both spin-up and -down states available.  Tunneling off, the electron (whether spin up or down) must tunnel into reservoir states with the spin, that is, only half of the reservoir states are available to it. As a result, $\Gamma_{in} = 2\Gamma_{out}$ when $\mu_{N+1}=E_F$. Extending this logic to a general case gives the same results as derived from detailed balance \cite{Gustavsson2009}, 
 %
 \begin{align}
-	\Gamma_{in} &=  g_{N+1} \Gamma f(E_F - \mu_{N+1}) \label{eqn:gin}\\
-	\Gamma_{out} &= g_{N} \Gamma [1 - f(E_F - \mu_{N+1})] \label{eqn:gout}
+	\Gamma_{in} &=  g_{N+1} \Gamma f(E_F - \mu_{N+1}) \label{eqn:rates}\\
+	\Gamma_{out} &= g_{N} \Gamma [1 - f(E_F - \mu_{N+1})] \nonumber
 \end{align}
 %
+<<<<<<< HEAD
 %MAKE THIS ONE EQUATION
 
 where $\Gamma$ is a coupling constant, $f$ is the Fermi function, and $g_{N/N+1}$ are the degeneracies of the $N$ and $N+1$ electron states.
 
 The midpoint of the transition between the $N$ and $N+1$ electron states, measured by the charge sensor, occurs when the dot is occupied half the time, that is, when $\Gamma_{in} = \Gamma_{out}$. From Eqs.~\ref{eqn:ginout}, $\Gamma_{in} = \Gamma_{out}$ occurs when $\mu_{N+1} = E_F$ as long as $g_{N}=g_{N+1}$, but when $g_{N}<>g_{N+1}$ the midpoint of the transition shifts away from $\mu_{N+1}=E_F$ by an amount that depends on the broadening of the Fermi function and therefore on $T$.   Thus, a measurement of how the midpoint of the transition (V_0) shifts with T allows a determination of the ratio $g_{N+1}/g_{N}$, which itself is related to $dS$ through the Boltzmann entropy formula, $S=k_B ln(g)$.  The relationship between degeneracies and tunnel rates was recently explored in a time-resolved measurement \cite{Hofmann2016}.  The thermal technique presented here extends the measurement of entropy (degeneracy) to a wider set of applications, where the tunneling process may not be convenient or even possible to observe directly.
+=======
+where $\Gamma$ is a coupling constant and $g_{N/N+1}$ are the degeneracies of the $N$ and $N+1$ electron states.. The midpoint of the transition between the $N$ and $N+1$ electron states, measured by the charge sensor, occurs when the $\Gamma_{in} = \Gamma_{out}$. It is clear from Eq.~\ref{eqn:rates} that in the case $g_{N}=g_{N+1}$, $\Gamma_{in} = \Gamma_{out}$ when $\mu_{N+1} = E_F$. However, if the two occupation states differ in their degeneracy, the midpoint of the transition shifts away from $\mu_{N+1}=E_F$. Thermal broadening of the Fermi functions in Eq.~\ref{eqn:rates} means that the chemical potential at which $\Gamma_{in} = \Gamma_{out}$ depends on $T$ as well as $g_{N/N+1}$. By measuring $dV_0$ ($d_\mu$) as a function of $dT$, the ratio $g_{N+1}/g_{N}$ can be determined, which is related to $dS$ through the Boltzmann entropy. The relationship between degeneracies and tunnel rates was recently explored in a time-resolved measurement \cite{Hofmann2016}.  The thermal technique presented here extends the measurement of entropy (degeneracy) to a wider set of applications, where the tunneling process may not be convenient or even possible to observe directly.
+>>>>>>> edits to fig 2 discussion
 
 %%% fab/measurement details %%%
 The device was built on a AlGaAs/GaAs heterostructure, hosting a 2D electron gas with density and mobility at \SI{300}{\milli\kelvin} (determined on a separate chip) of \SI{2.42e11}{\per\square\centi\metre} and \SI[per-mode=symbol]{2.56e6}{\square\centi\metre\per\volt\per\second}.   Mesas and NiAuGe ohmic contacts to the 2DEG were defined by standard photolithography techniques, then \SI{10}{\nano\metre} of $\mathrm{HfO_2}$ was deposited via atomic layer deposition to improve the gating stability to the device. Electron beam lithography followed by evaporation of \SI{20}{\nano\metre} of Ti/Au defined the fine gate structures, including the \SI{200}{\nano\metre} diameter quantum dots. The measurement was carried out in an dilution refrigerator with a base temperature of \SI{14}{\milli\kelvin}.
@@ -83,14 +92,14 @@ The device was built on a AlGaAs/GaAs heterostructure, hosting a 2D electron gas
 %%% figure 2 %%%
 \begin{figure}[!]
         \includegraphics[width=1.0\columnwidth]{../figures/figure_2.pdf}
-        \caption{\label{fig:fig2}(a) Charge sensor data for $N=0 \rightarrow 1$ at 100 and 160mK. Temperature is set by DC current through the QPC heater. (b) Derivative of the charge sensor signal with $dT \sim 60mK$. Fits to $dg$ are shown with $\delta$ as a free parameter (solid) and $\delta=0$ (dashed) (c) Transition width, $\Theta$, as a fucntion of mixing chamber temperature. The highlighted, linear region is where all the data discussed were measured. Fitting a straight line to this data, the lever arm $\alpha$ is calculated. (d) $\Theta$ as a function of DC current through the QPC heater. The linear fit is used to convert between $I_{heat}$ and $dT$, with $R_{QPC}$ fixed at 20$k\Omega$ (e) Change in entropy as a function of AC current through the QPC heater. Top axis shows corresponding $dT$. (f) Raw data from which $dS / k_B$ in (c), and the line cut in (b) were extracted.}
+        \caption{\label{fig:fig2}(a) Charge sensor data for $N=0 \rightarrow 1$ at 100 and 160mK. Temperature is set by DC current through the QPC heater. (b) Derivative of the charge sensor signal with $dT \sim 60mK$. Fits to $dg$ are shown with $\delta$ as a free parameter (solid) and $\delta=0$ (dashed) (c) Transition width, $\Theta$, as a function of mixing chamber temperature. The highlighted, linear region is where all the data discussed were measured. Fitting a straight line to this data, the lever arm $\alpha$ is calculated. (d) $\Theta$ as a function of DC current through the QPC heater. The linear fit is used to convert between $I_{heat}$ and $dT$, with $R_{QPC}$ fixed at 20$k\Omega$ (e) Change in entropy as a function of AC current through the QPC heater. Top axis shows corresponding $dT$. (f) Raw data from which $dS / k_B$ in (c), and the line cut in (b) were extracted.}
 \end{figure}
 
 %%% device setup %%%
-Using the gates on the right hand side of Fig~\ref{fig:fig1}a, the quantum dot was tuned such that there is a weak tunnel coupling to the reservoir on the source side with the drain side of the dot closed. The charge sensing QPC was tuned to a conductance of ${\sim}e^2/h$. A small DC voltage bias was applied across the QPC and the measured current was used to calculate the sensor conductance. The reservoir temperature was controlled either by varying the fridge temperature or by Joule heating through the QPC on the left side of the channel. In the latter case, the QPC was fixed at \SI{20}{\kilo\ohms} and biased using an AC or DC current source. The Joule heating strategy gives fast control of the temperature (up to \SI{100}{\hertz}) while keeping the voltage drop across the reservoir negligably small.
+Using the gates on the right hand side of Fig~\ref{fig:fig1}a, the quantum dot was tuned such that it was tunnel coupled to the reservoir on the source side with the drain side closed. The charge sensing QPC was tuned to a conductance of ${\sim}e^2/h$, where it was found to be most sensitive as a charge detector. A small DC voltage bias was applied across the QPC and the measured current was used to calculate the sensor conductance. The reservoir temperature was controlled either by varying the mixing chamber temperature or by Joule heating through the QPC on the left side of the channel. In the latter case, the QPC was fixed at \SI{20}{\kilo\ohm} and biased with an AC or DC current source. The Joule heating setup gives fast control of the temperature (up to \SI{100}{\hertz}) while keeping the voltage drop across the reservoir negligibly small.
 
 %%% figs 2a and b %%%
-Assuming the source barrier is in the limit where single electron transitions ($\Gamma_{In/Out}$) are only broadened by the temperature of the reservoir (discussed further in Fig. \ref{fig:fig2}c, the charge sensor conductance takes the form,
+Fig.~\ref{fig:fig2}a shows the charge sensor conductance as the first electron is added to the dot by tuning $V_G$, at two different temperatures. The higher temperature transition curve is broadened by the increased temperature and shifted left due to the change in entropy (degeneracy)  between the empty and singly-occupied states. Assuming the source barrier is sufficiently large, $\Gamma_{in/out}$ are broadened only by the temperature of the reservoir and the conductance takes the form,
 %
 \begin{align}
 \label{eqn:g}
@@ -98,10 +107,12 @@ Assuming the source barrier is in the limit where single electron transitions ($
                         &\quad + G_1\left[V-V_0(\Theta)\right] + G_2 \nonumber
 \end{align}
 %
-where $\Theta = \frac{k_B T}{\alpha e}$, $\alpha$ is the lever arm for the quantum dot plunger gate, and $G_1$ is determined by the cross capacitance between the sensor gates and the plunger gate.
+where $\Theta = \frac{k_B T}{\alpha e}$, $\alpha$ is the lever arm for the quantum dot plunger gate, and $G_1$ is determined by the cross capacitance between the sensor gates and the plunger gate. Fits to this equation are seen in addition to the sensor data in Fig.~\ref{fig:fig2}a. From the fits the transition width in mV, $\Theta$, can be extracted. Fig.~\ref{fig:fig2}b $\Theta$ is plotted as a function of mixing chamber temperature, $T_{MC}$. From this plot it is clear that Eq.~\ref{eqn:g} holds when $T_{MC}\geq$\SI{100}{\milli\kelvin}. For this reason, the mixing chamber temperature remains mixed at \SI{100}{\milli\kelvin} for the remainder of this work. Fitting high temperature data in Fig.~\ref{fig:fig2} to the definition of $\Theta$ (with $T=T_{MC}$) yields $\alpha$, making it possible to convert from $V_G$ to $\mu$ directly.
 
 %%% figs 2c and d%%%
-Fluctuations in $g_{sens}$ were measured at $2f_{Heat}$ using a lock-in amplifier; the temperature of the reservoir goes as $dT^2 \sim P^{AC}_{Heat} \sim \sin^2(2\omega t)$. Taking a derivative of Eq. \ref{eqn:g} with respect to temperature gives the change in conductance, $dg_{sens}$, as measured by the lock-in amplifier,
+Data in Fig.~\ref{fig:fig2}c, and the corresponding fits, illustrate how entropy was measured at a single charge transition. Fluctuations in $g_{sens}$, $dg_{sens}$, were measured as $T_{electron}$ in the reservoir was varied using Joule heating with an AC current source ($f_{Heat}$\SI{48.7}{\hertz}). The change in $T_{electron}$ of the reservoir is given by $dT \sim I^{AC}_{Heat} \sim \sin^2(2\omega t)$. A calibration for $dT$, using $\alpha$ as measured in Fig.~\ref{fig:fig2}b, can be seen in Fig.~\ref{fig:fig2}c. To avoid thermally accessing excited states of the dot it must be true that $k_B dT \ll \Delta$ where $\Delta$ is the level spacing between the ground and first excited states; which holds for all transitions investigated. 
+
+To acquire $dg_{sens}$, current fluctuations through the charge sensor were measured at $2f_{Heat}$ using a lockin amplifier. Taking a derivative of Eq. \ref{eqn:g} with respect to temperature gives the form of $dg_{sens}$ near a charge transition,
 %
 \begin{align}
 \label{eqn:dg}
@@ -109,28 +120,26 @@ Fluctuations in $g_{sens}$ were measured at $2f_{Heat}$ using a lock-in amplifie
         				      &\quad\cosh^{-2}\left(\frac{V-V_0(\Theta)}{2\Theta}\right) \nonumber
 \end{align}
 %
-where $\delta=\frac{\partial V_0}{\partial \Theta}$. By using the lever arm to convert $V_0$ to chemical potential $\mu$, and recalling Eq. \ref{eqn:max}, the parameter $\delta$ can be related to the change in entropy,
+where $\delta=\frac{\partial V_0}{\partial \Theta}$. Using the lever arm to convert $V_0$ to a chemical potential $\mu$, the parameter $\delta$ can be related to the change in entropy through Eq.~\ref{eqn:max},
 %
 \begin{align}
 \label{eqn:delta}
         \delta &= \frac{\partial V_0}{\partial \Theta} = 
         \frac{1}{k_B} \frac{\partial \mu}{\partial T} = 
-        -\frac{1}{k_B} \frac{\partial S}{\partial N}
+        -\frac{1}{k_B} \partial S
 \end{align}
 %
-
-The entropy measurement requires no further calibration to extract the desired results from the $dg$ fits. However, it is necessary to ensure that the range of temperatures and energies fit the analysis. To begin, the dot is depleted by tuning the plunger gate and identifying the empty dot using the charge sensor. Typical charge sensor curves for the $N=0 \rightarrow 1$ transision are shown in Fig. \ref{fig:fig2}. The width of the charge sensor signal, determined by fitting Eq. \ref{eqn:g}, is measured as a function of the mixing chamber temperature in Fig. \ref{fig:fig2}c). At a sufficiently high temperature, $T_{electron}=T_{MC}$, and the transition width is determined only by $T_{MC}$ (highlighted region in Fig. \ref{fig:fig2}c). A line fit to $\Theta = \frac{k_B T_{MC}}{\alpha e}$ is used to determine $\alpha$. The remainder of the measurements are performed in the linear region of Fig. \ref{fig:fig2}c at $T_{MC} = 100mK$, where Eqs. \ref{eqn:g} and \ref{eqn:dg} are valid. Fig. \ref{fig:fig2}d shows the calibration of $dT$ as a function of DC current through the QPC heater ($P_{Heat} = I^2_{Heat} R_{QPC}$). Using $\alpha$ to convert from $\Theta$ to $T_{electron}$, the linear fit Fig. \ref{fig:fig2}d gives the the conversion from $I_{Heat}$ to $dT$. To avoid thermally accessing excited states of the dot it must be true that $k_B dT \ll \Delta$ where $\Delta$ is the level spacing between the ground and first excited states; which holds for all transitions investigated.
-
-Data in Fig. \ref{fig:fig2}b show the change in quantum dot entropy determined directly from the lock-in signal, $dg_{sens}$. Fits to Eq. \ref{eqn:dg} are shown for $\delta=0$ (dashed) and a best fit to $\delta$ (solid). It is clear from these fits, $\delta$ is necessary to properly fit the asymmetry in peak height, with the best fit being $\delta \approx \ln{2}$. This is easily understood from the Boltzmann entropy. For an N-electron macrostate on the quantum dot, entropy is given by,
+Fits to Eq.~\ref{eqn:dg} are shown for $\delta=0$ and a best fit to $\delta$. From these fits it is clear $\delta\neq0$ is necessary to properly fit the asymmetry in peak height, with the best fit being $\delta \approx \ln{2}$. For an N-electron macrostate on the quantum dot, entropy is given by the Boltzmann entropy,
 %
 \begin{align}
 \label{eqn:S}
         S &= k_B \ln{\Omega}
 \end{align}
 %
-where $\Omega$ is the number of microstates available. The number of microstates is equal to the spin degeneracy of the ground state. For the 0-1 transition, this gives $dS =  k_B\ln{2} - k_B \ln{1} = k_B\ln{2}$.
+where $\Omega$ is the spin degeneracy of the ground state, equal to the number of microstates available. For the 0-1 transition, $dS =  k_B\ln{2} - k_B \ln{1} = k_B\ln{2}$.
 
-Because $\delta$ is a fit parameter independent of $dT$, it is possible to extract the same $\delta$ value for a range of $dT$ ($I^{AC}_{Heat}$). Fig. \ref{fig:fig2}e shows that $dS$, as determined from $dg_{sens}$ fits, remains constant over a range of $dT$. Looking at the vertical scale on the right side of Fig. \ref{fig:fig2}e, the same shift in chemical potential on the dot is given in units of gate voltage shift per unit temperature change. This illustrates why the lock-in measurement was utilized; device stability and small signals made it difficult for the entropy to be determined directly from $g_{sens}$ using DC heating.
+%%% fig 2e %%%
+Note that $\delta$ is a fit parameter independent of $dT$ and $\alpha$. Fig.~\ref{fig:fig2}e shows that $dS$, as determined from fits to $dg_{sens}$ data, remains constant over a range of $dT$ ($I^{AC}_{Heat}$). The vertical scale on the right side of Fig. \ref{fig:fig2}e, $\delta$ in units of gate voltage per unit temperature, illustrates the necessity of the lockin measurement; device stability and small signals made it difficult for $delta$ to be determined directly from $g_{sens}$ at different $T$.
 
 %%% figure 3 %%%
 \begin{figure}
