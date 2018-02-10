@@ -6,6 +6,7 @@ paper/*.pdf
 paper/*.gz
 paper/*.out
 paper/*.aux
+paper/.texpadtmp
 
 # apple nonsense
 .DS_Store
