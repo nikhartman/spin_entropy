@@ -275,9 +275,10 @@ def i_sense_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, 
 
         for i in range(n):
             fit_params.add('x0_{0:d}'.format(i), value=centers[i], min=x0bounds[0], max=x0bounds[1])
-            fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.2, max=10.0)
+            fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.05, max=10.0)
             fit_params.add('i0_{0:d}'.format(i), 
-                            value=abs(z[i,ilow[i]:ihigh[i]].max()-z[i,ilow[i]:ihigh[i]].min()), min=0.001, max=10.0)
+                            value=abs(z[i,ilow[i]:ihigh[i]].max()-z[i,ilow[i]:ihigh[i]].min()),
+                            min=0.001, max=10.0)
             fit_params.add('i1_{0:d}'.format(i), value=0.1, min=0.0, max=10.0)
             fit_params.add('i2_{0:d}'.format(i), value=z[i,ilow[i]:ihigh[i]].mean(), min=0.0, max=20.0)
 
@@ -297,7 +298,7 @@ def i_sense_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, 
         for i in range(n):
             p0 = [centers[i], widths[i], abs(z[i,ilow[i]:ihigh[i]].max()-z[i,ilow[i]:ihigh[i]].min()),
                       0.1, z[i,ilow[i]:ihigh[i]].mean()]
-            bounds = [(x0bounds[0], 0.2, 0.001, 0.0, 0.0), (x0bounds[1], 10.0, 10.0, 10.0, 20.0)]
+            bounds = [(x0bounds[0], 0.05, 0.001, 0.0, 0.0), (x0bounds[1], 10.0, 10.0, 10.0, 20.0)]
             df.loc[i], _ = curve_fit(i_sense, x[i,ilow[i]:ihigh[i]], z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
                           
     return df
@@ -365,7 +366,7 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
 
         for i in range(n):
             fit_params.add('x0_{0:d}'.format(i), value=centers[i], min=x0bounds[0], max=x0bounds[1])
-            fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.2, max=10.0)
+            fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.05, max=10.0)
             fit_params.add('di0_{0:d}'.format(i), 
                                value=0.5*max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())), min=0.0, max=0.5)
             fit_params.add('di2_{0:d}'.format(i), value=(z[i,ilow[i]]+z[i,ihigh[i]])/2.0, min=-0.01, max=0.01)
@@ -393,7 +394,7 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
         for i in range(n):
             p0 = [centers[i], widths[i], max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())),
                   (z[i,ilow[i]]+z[i,ihigh[i]])/2.0, 0.0]
-            bounds = [(x0bounds[0], 0.2, 0.0, -0.05, -2.0), (x0bounds[1], 10.0, 0.5, 0.05, 2.0)]
+            bounds = [(x0bounds[0], 0.05, 0.0, -0.05, -2.0), (x0bounds[1], 10.0, 0.5, 0.05, 2.0)]
             df.loc[i], _ = curve_fit(di_sense_simple, x[i,ilow[i]:ihigh[i]], z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
                           
     return df
