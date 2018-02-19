@@ -1,9 +1,7 @@
-# lines
+### lines ###
 lines.linewidth: 1
 
-# scatter
-
-# ticks
+### ticks ###
 xtick.direction: in
 ytick.direction: in
 xtick.top: True
@@ -11,26 +9,36 @@ ytick.right: True
 axes.labelpad: 2.0
 axes.axisbelow: True
 
-# fonts
+### fonts ###
+# trying to find a sans-serif configuration for math that 
+# is not a terrible eyesore
+# this is the best usetex:True option I have found...
+# text.usetex: True
+# text.latex.preamble: \usepackage{arev}
+
+# and the best usetex:False option I found...
+text.usetex: False
 font.family: sans-serif
 font.sans-serif: Helvetica
-text.usetex: False
+mathtext.fontset : custom
+mathtext.default: regular
+mathtext.rm : Helvetica
+mathtext.it : Helvetica:italic
+mathtext.bf : Helvetica:bold
+mathtext.sf : Helvetica
+mathtext.tt : Helvetica
+mathtext.cal : Helvetica:italic
+
 font.size: 14
 axes.labelsize: 14
 xtick.labelsize: 12
 ytick.labelsize: 12
-# mpl.rcParams['axes.labelsize'] = 13
-# mpl.rcParams['font.size'] = 13
-# mpl.rcParams['legend.fontsize'] = 13
-# mpl.rcParams['xtick.labelsize'] = 13
-# mpl.rcParams['ytick.labelsize'] = 13
-mathtext.default: regular
     
 # legends
 legend.frameon: False
-legend.fontsize: 14
+legend.fontsize: 12
 legend.handletextpad: 0.25
-legend.handlelength: 1.5
+legend.handlelength: 1
 legend.borderaxespad : 0.25
 
 # maybe needed to avoid Type 3 fonts

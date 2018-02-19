@@ -78,8 +78,9 @@ def shiftedColorMap(cmap, start=0, midpoint=0.5, stop=1.0, name='shiftedcmap'):
 
     return newcmap
 
-def add_subplot_id(ax, id_lttr, loc, fontsize=18):
-    ax.text(*loc, '({0:s})'.format(id_lttr), transform=ax.transAxes, fontsize=fontsize)
+def add_subplot_id(ax, id_lttr, loc, fontsize=16):
+    ax.text(*loc, r'{0:s}'.format(id_lttr), transform=ax.transAxes, 
+            fontsize=fontsize, fontweight='bold')
 
 #########################
 ### DATA MANIPULATION ###
@@ -304,7 +305,6 @@ def i_sense_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, 
 def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix = None, span = None):
     
     def di_dataset(params, i, xx):
-        """ Weak localization peak fitting function. Adapted from Igor code. """
         
         x0 = params['x0_{0:d}'.format(i)]
         theta = params['theta_{0:d}'.format(i)]
@@ -316,7 +316,7 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
     
     def di_objective(params, xx, zz, idx0, idx1):
         """ calculate total residual for fits to several data sets held
-            in a 2-D array, and modeled by Gaussian functions"""
+            in a 2-D array """
         
         n,m = zz.shape
         resid = []
