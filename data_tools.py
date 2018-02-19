@@ -165,13 +165,13 @@ def parabola(x, a, b, c):
 
 def i_sense(x, x0, theta, i0, i1, i2):
     """ fit to sensor current """
-    arg = (x-x0)/theta
+    arg = (x-x0)/(2*theta)
     return -i0*np.tanh(arg) + i1*(x-x0) + i2
 
-def di_sense_simple(x, x0, theta, di0, di2, delta):
+def di_sense_simple(x, x0, theta, di0, di2, epsilon):
     """ fit charge sensor lock in signal """
-    arg = (x-x0)/theta
-    return -(0.5)*di0*(arg+delta)*(np.cosh(arg)**-2) + di2
+    arg = (x-x0)/(2*theta)
+    return -1.0*di0*(arg+0.5*epsilon)*(np.cosh(arg)**-2) + di2
 
 def p_up(field, temp, g, de):
     return 1/(1+np.exp(-(g*MU_B*field-de)/(K_B*temp)))
@@ -310,9 +310,9 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
         theta = params['theta_{0:d}'.format(i)]
         di0 = params['di0_{0:d}'.format(i)]
         di2 = params['di2_{0:d}'.format(i)]
-        delta = params['delta_{0:d}'.format(i)]
+        epsilon = params['epsilon_{0:d}'.format(i)]
         
-        return di_sense_simple(xx, x0, theta, di0, di2, delta)
+        return di_sense_simple(xx, x0, theta, di0, di2, epsilon)
     
     def di_objective(params, xx, zz, idx0, idx1):
         """ calculate total residual for fits to several data sets held
@@ -354,7 +354,7 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
         ilow = np.zeros(n, dtype=np.int)
         ihigh = -1*np.ones(n, dtype=np.int)
     
-    columns = ['x0', 'theta', 'di0', 'di2', 'delta']
+    columns = ['x0', 'theta', 'di0', 'di2', 'epsilon']
     df = pd.DataFrame(columns=columns)
     
     # add constraints specified in the 'constrain' list
@@ -367,9 +367,9 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
             fit_params.add('x0_{0:d}'.format(i), value=centers[i], min=x0bounds[0], max=x0bounds[1])
             fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.2, max=10.0)
             fit_params.add('di0_{0:d}'.format(i), 
-                               value=max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())), min=0.0, max=0.5)
+                               value=0.5*max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())), min=0.0, max=0.5)
             fit_params.add('di2_{0:d}'.format(i), value=(z[i,ilow[i]]+z[i,ihigh[i]])/2.0, min=-0.01, max=0.01)
-            fit_params.add('delta_{0:d}'.format(i), value=0.0, min=-2.0, max=2.0)
+            fit_params.add('epsilon_{0:d}'.format(i), value=0.0, min=-2.0, max=2.0)
 
         if(constrain):
             for p in constrain:
