@@ -303,7 +303,29 @@ def i_sense_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, 
                           
     return df
 
-def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix = None, span = None):
+def di_fit_simultaneous(x, z, centers, widths, x0bounds, 
+                        constrain = None, fix = None, span = None, 
+                        nboot=None, bootstat='bounds'):
+    
+    def di_bootstrap_eps(mboot, xx, zz, fit_params, jlow, jhigh, pp0, bbounds):
+        """ bootstrap estimate of errors on epsilon for single curve fit 
+            Following this: http://www.phas.ubc.ca/~oser/p509/Lec_20.pdf """
+        
+        # create zfit and resid, both of which have shape=z.shape
+        zfit = di_sense_simple(xx, *fit_params)
+        resid = zz - zfit
+        
+        boot_results = np.zeros((mboot,len(fit_params)))
+        for k in range(mboot):
+            ztest = zfit + np.random.choice(resid.flatten(), size=zfit.shape)
+            out, _ = curve_fit(di_sense_simple, xx[jlow:jhigh], 
+                                ztest[jlow:jhigh], p0=pp0, bounds=bbounds)
+            boot_results[k] = out
+        
+        if bootstat=='bounds':
+            return np.percentile(boot_results[:,-1], [2.5, 97.5])
+        elif bootstat=='std':
+            return np.array([boot_results[:,-1].std(), boot_results[:,-1].std()])
     
     def di_dataset(params, i, xx):
         
@@ -368,8 +390,11 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
             fit_params.add('x0_{0:d}'.format(i), value=centers[i], min=x0bounds[0], max=x0bounds[1])
             fit_params.add('theta_{0:d}'.format(i), value=widths[i], min=0.05, max=10.0)
             fit_params.add('di0_{0:d}'.format(i), 
-                               value=0.5*max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())), min=0.0, max=0.5)
-            fit_params.add('di2_{0:d}'.format(i), value=(z[i,ilow[i]]+z[i,ihigh[i]])/2.0, min=-0.01, max=0.01)
+                            value=0.5*max(abs(z[i,ilow[i]:ihigh[i]].min()),
+                                          abs(z[i,ilow[i]:ihigh[i]].max())), 
+                           min=0.0, max=0.5)
+            fit_params.add('di2_{0:d}'.format(i), value=(z[i,ilow[i]]+z[i,ihigh[i]])/2.0, 
+                           min=-0.01, max=0.01)
             fit_params.add('epsilon_{0:d}'.format(i), value=0.0, min=-2.0, max=2.0)
 
         if(constrain):
@@ -391,10 +416,20 @@ def di_fit_simultaneous(x, z, centers, widths, x0bounds, constrain = None, fix =
     else:
         # no parameters need to be fixed between data sets
         # fit them all separately (much faster)
+        if nboot:
+            eps_err = np.zeros((n,2))
         for i in range(n):
-            p0 = [centers[i], widths[i], max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())),
+            p0 = [centers[i], widths[i], 
+                  max(abs(z[i,ilow[i]:ihigh[i]].min()), abs(z[i,ilow[i]:ihigh[i]].max())),
                   (z[i,ilow[i]]+z[i,ihigh[i]])/2.0, 0.0]
             bounds = [(x0bounds[0], 0.05, 0.0, -0.05, -2.0), (x0bounds[1], 10.0, 0.5, 0.05, 2.0)]
-            df.loc[i], _ = curve_fit(di_sense_simple, x[i,ilow[i]:ihigh[i]], z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
-                          
+            df.loc[i], _ = curve_fit(di_sense_simple, x[i,ilow[i]:ihigh[i]], 
+                                             z[i,ilow[i]:ihigh[i]], p0=p0, bounds=bounds)
+            
+            if nboot:
+                eps_err[i] = di_bootstrap_eps(nboot, x[i], z[i], df.loc[i],
+                                     ilow[i], ihigh[i], p0, bounds)
+        if nboot:
+            return df, eps_err
+            
     return df
