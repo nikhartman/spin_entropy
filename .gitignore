@@ -8,6 +8,9 @@ paper/*.out
 paper/*.aux
 paper/.texpadtmp
 
+# dropbox
+.dropbox
+
 # apple nonsense
 .DS_Store
 
