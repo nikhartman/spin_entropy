@@ -1,0 +1,228 @@
+% make text changes noted throughout text
+
+% go through the whole thing once for clarity
+
+% manfra comments:
+%         didn?t understand how the measurement was done. thought we were measuring Vmid and seeing it shift.  
+%         wanted to know more about how this technique would actually be implemented to realize one of the more exciting proposals.
+
+% mohammad comments:
+% 	    Figure 2 -- (c) make more clear how delta T was obtained (d) consider changing delta T to T
+%         make more clear how the 5/2 measurement relates to what was done here
+%         gate-tuned -- change this phrase in the methods
+%         I_heat looks like it shorts the sample in Figure 1a
+%         Nature Methods -- suggestion for journal
+
+% consider plotting equation 2 as insets in top right of Figures 1b and 1c-- if we need to
+% less discussion of rates -- move to a supplement?
+
+\documentclass[twocolumn,showpacs,amsmath,amssymb,prl,aps,superscriptaddress]{revtex4-1}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{siunitx}
+\usepackage{hyperref}
+
+\newcommand{\ket}[1]{\ensuremath{\left|#1\right\rangle}}
+
+\begin{document}
+
+\title{Direct Entropy Measurement in a Mesoscopic Quantum System}
+\author{Nikolaus Hartman}
+\email{nik.hartman@gmail.com}
+\thanks{The raw data and Python code used for all figures and analysis can be found at \url{https://github.com/nikhartman/spin_entropy}}
+	\affiliation{Stewart Blusson Quantum Matter Institute, University of British Columbia, Vancouver, British Columbia, V6T1Z4, Canada}
+	\affiliation{Department of Physics and Astronomy, University of British Columbia, Vancouver, British Columbia, V6T1Z1, Canada}
+\author{Christian Olsen}
+	\affiliation{Stewart Blusson Quantum Matter Institute, University of British Columbia, Vancouver, British Columbia, V6T1Z4, Canada}
+	\affiliation{Department of Physics and Astronomy, University of British Columbia, Vancouver, British Columbia, V6T1Z1, Canada}
+\author{Silvia Folk}
+	\affiliation{Stewart Blusson Quantum Matter Institute, University of British Columbia, Vancouver, British Columbia, V6T1Z4, Canada}
+	\affiliation{Department of Physics and Astronomy, University of British Columbia, Vancouver, British Columbia, V6T1Z1, Canada}
+\author{Mohammad Samani}
+	\altaffiliation{The Hospital for Sick Children, Toronto, ON, Canada}
+	\altaffiliation{Fields Institute for Research in Mathematical Sciences, Toronto, ON, Canada}
+	\affiliation{Stewart Blusson Quantum Matter Institute, University of British Columbia, Vancouver, British Columbia, V6T1Z4, Canada}
+	\affiliation{Department of Physics and Astronomy, University of British Columbia, Vancouver, British Columbia, V6T1Z1, Canada}
+\author{Saeed Fallahi}
+	\affiliation{Department of Physics and Astronomy, Purdue University}
+	\affiliation{Station Q Purdue, Purdue University}
+	\affiliation{Birck Nanotechnology Center, Purdue University, West Lafayette, Indiana, USA}
+\author{Geoffrey C. Gardner}
+	\affiliation{Station Q Purdue, Purdue University}
+	\affiliation{Birck Nanotechnology Center, Purdue University, West Lafayette, Indiana, USA}
+    	\affiliation{School of Materials Engineering, Purdue University, West Lafayette, Indiana, USA}
+\author{Michael Manfra}
+	\affiliation{Department of Physics and Astronomy, Purdue University}
+	\affiliation{Station Q Purdue, Purdue University}
+	\affiliation{Birck Nanotechnology Center, Purdue University, West Lafayette, Indiana, USA}
+	\affiliation{School of Electrical and Computer Engineering,  Purdue University, West Lafayette, Indiana, USA}
+    	\affiliation{School of Materials Engineering, Purdue University, West Lafayette, Indiana, USA}
+\author{Joshua Folk}
+\email{jfolk@physics.ubc.ca}
+	\affiliation{Stewart Blusson Quantum Matter Institute, University of British Columbia, Vancouver, British Columbia, V6T1Z4, Canada}
+	\affiliation{Department of Physics and Astronomy, University of British Columbia, Vancouver, British Columbia, V6T1Z1, Canada}
+\date{\today}
+
+\maketitle
+
+%%%%%%% intro material %%%%%%%%%
+\textbf{The thermodynamic properties of electronic systems offer important insights into the nature of their ground states, and can probe exotic quasiparticles that may emerge due to interactions or non-trivial topology.  Systems that are difficult to clearly identify through standard conductance measurements may be characterized more precisely with a thermodynamic measurement. For example, the purported non-Abelian exchange statistics of Moore-Read quasiparticles in the $\nu = \frac{5}{2}$ fractional quantum Hall state, or of Majorana quasiparticles in a topological superconductor, could be clearly distinguished from the Abelian case by an entropy measurement \cite{Cooper2009, Smirnov2015}.  Such measurements are typically based on bulk properties, like heat capacity, that are clearly observed in macroscopic samples but are immeasurably small in systems that may consist of only a few electrons.  Here, we develop a mesoscopic circuit to make direct entropy measurements of the first, second, and third electron ground states in a GaAs quantum dot.  This system is chosen for having well-known entropy based on simple spin states\cite{Tarucha1996, Ciorga2000, Duncan2000, Lindemann2002, Potok2003, Hofmann2016}.  The precision of this technique, quantifying the entropy of a single spin-$\frac{1}{2}$ to within 5\% of the expected value ($k_B \ln{2}$), shows its future potential for probing more exotic systems, from Majorana states to non-Fermi liquid Kondo states, that are clearly identified by their residual low-temperature entropy\cite{Alkurtass2016}.}
+
+%%% figure 1 %%%
+\begin{figure}[!]
+        \includegraphics[width=1.0\columnwidth]{../figures/figure_1_annotated.pdf}
+        \caption{\label{fig:fig1}(a) Scanning electron micrograph of a device similar to the one measured, showing electrostatic gates (gold) used to define a circuit in a 2D electron gas (2DEG). Grey gates are grounded. Squares show the locations of ohmic contacts to the 2DEG. An electron reservoir is formed between the parallel gates running vertically down the image, with a quantum dot coupled to the right side. The reservoir can be heated by driving current through the quantum point contact on the left.  Electrons tunneling between the reservoir and dot are measured with a capacitively-coupled charge sensor. (b) and (c) Simulated charge sensor signal for a transition from $N-1 \rightarrow N$ electrons at two temperatures ($T_{Red} > T_{Blue}$), showing two possible cases for $\frac{\partial S}{\partial N}$.}
+\end{figure}
+
+Our approach is analogous to the milestone of spin-to-charge conversion achieved over a decade ago, in which the infinitesimal magnetic moments of a single spin were detected by transforming them into the presence or absence of an electron charge \cite{Elzerman2004, Ono2004}.  Following this logic, we perform an entropy-to-charge conversion, making use of the Maxwell relation
+%
+\begin{align}
+\label{eqn:max}
+        \left(\frac{\partial \mu}{\partial T}\right)_{p,N} &= -\left(\frac{\partial S}{\partial N}\right)_{p,T}
+\end{align}
+%
+that connects changes in entropy, particle number, and temperature ($S$, $N$, and $T$, respectively) to changes in the chemical potential, $\mu$, a quantity that is simple to measure and control. The fixed pressure condition of Eq.~\ref{eqn:max} is met by working well below the Fermi temperature of the 2DEG, $T_F \sim \SI{5}{\kelvin}$, where degeneracy pressure dominates \cite{Landau1969}.
+
+The Maxwell relation in Eq.~\ref{eqn:max} forms the basis of two theoretical proposals to measure non-Abelian exchange of quasiparticles in the the $\nu = \frac{5}{2}$ state, by detecting a change in quasiparticle chemical potential with temperature, which is proportional to the entropy derivative, $\frac{\partial S}{\partial N}$ \cite{Cooper2009,Ben-Shach2013}. Applying the language of quantum dots to Eq.~\ref{eqn:max}, the entropy difference between the $N-1$ to $N$ quantum dot ground states ($\Delta S_{N-1\rightarrow N}$ for $\Delta N=1$) is measured via the shift with temperature in the electrochemical potential, $\mu_N$, needed to add the $N$th electron to the dot. 
+
+The mesoscopic circuit shown in Fig.~\ref{fig:fig1}a uses electrostatic gates to realize an electron reservoir (central region; hereafter ``reservoir") in thermal and diffusive equilibrium with a few-electron quantum dot (``dot") coupled to its right side.  The occupation of the dot is tuned with the plunger gate voltage $V_G$, and measured using an adjacent quantum point contact (``charge sensor") \cite{Field1993, Staring2007, Thierschmann2015}.  Applying more positive $V_G$ lowers $\mu_N$, and brings the $N$th electron into the dot when $\mu_{N}$ drops below the Fermi level of the reservoir, $E_F$. The reservoir temperature, $T$, can be increased above the mixing chamber temperature, $T_{MC}$, by Joule heating through the QPC (``heater") on the left side.  Figure~\ref{fig:fig1}b illustrates a charge transition on the dot, seen as a step in the charge sensor conductance as a function of $V_G$ that is thermally broadened by the reservoir temperature.  The gate voltage corresponding to the midpoint of the transition, $V_{mid}$, marks the electrochemical potential at which the probabilities of finding $N-1$ and $N$ electrons on the dot are equal.
+
+When $\mu_N$ shifts with temperature (Eq.~\ref{eqn:max}), $V_{mid}$ also shifts; it is this shift $V_{mid}$ with temperature that forms the basis of our experiment (Fig.~\ref{fig:fig1}c).  In practice, charge noise limits the accuracy to which $V_{mid}$ can be measured, so the measurement is done with a lockin amplifier, oscillating the temperature and measuring resultant changes in the charge sensor conductance.  As seen from the grey shaded regions of Figs.~\ref{fig:fig1}b,c, this change is perfectly antisymmetric when $\partial S/\partial N=0$, but asymmetric when $\partial S/\partial N \neq 0$.
+
+The relation between entropy and the temperature-induced shift in $\mu_{N}$ with respect to $E_F$ can be understood through detailed balance.  The tunnel rates into and out of the dot, $\Gamma_{in}=\Gamma_{N-1\rightarrow N}$ and $\Gamma_{out}=\Gamma_{N\rightarrow N-1}$, depend on the number of available states in the tunneling process, and therefore on the degeneracies of the $N-1$ and $N$ ground states\cite{Beenakker1991, Gustavsson2009}.  Looking specifically at the ratio of those rates: 
+%
+\begin{equation}
+	\frac{\Gamma_{in}}{\Gamma_{out}} =  \frac{g_{N}}{g_{N-1}} \frac{f(E_F - \mu_{N})}{1-f(E_F - \mu_{N})} \label{eqn:rates}
+\end{equation}
+%
+where $f$ is the Fermi function and $g_{N(N-1)}$ is the degeneracy of the $N(N-1)$ electron state.  The equal probability condition for $N-1$ and $N$ electrons at $V_{mid}$ corresponds to the incoming and outgoing rates being equal, giving $g_{N-1}/g_{N}=f/(1-f)$. From the Boltzman entropy equation, $S_{N}=k_{B} \ln{g_N}$, and the form of the Fermi function, one finds $\Delta S_{N-1\rightarrow N}=e^{(\mu_{N}-E_F)/kT}$ at $V_{mid}$. It is straightforward to see from this relation that, when $\Delta S_{N-1\rightarrow N} \neq 0$, $\mu_N$ at $V_{mid}$ will shift relative to $E_F$ by an amount that is proportional to $T$. Previous experiments have explored the relationship between tunnel rates and degeneracy using time-resolved transport spectroscopy and coupling of quantum dots to atomic force microscope oscillations \cite{Cockins2010, Bennett2010, Beckel2014, Hofmann2016}. The approach presented here illustrates the thermodynamic equivalent of the rate measurement, and extends entropy measurements to a wide set of applications where tunneling processes may not be possible to observe in real-time.
+
+%%% figure 2 %%%
+\begin{figure}[!]
+        \includegraphics[width=1.0\columnwidth]{../figures/figure_2.pdf}
+        \caption{\label{fig:fig2}(a) Charge sensor data for $N=0 \rightarrow 1$ at two temperatures set by DC current through the QPC heater. (b) Transition width, $\Theta$, was linear in $T_{MC}$ above 100 mK, for $I_{heat}=0$. Lever arm $\alpha$ is calculated by fitting a straight line to this region.  (c) Lock-in measurement of $\delta g_{sens}$ with $\delta T = \SI{32}{\milli\kelvin}$. Fits to $\delta g_{sens}$ (Eq.~\ref{eqn:dg-sens}) are shown with $\epsilon=-\Delta S / k_B$  (Eq.\ref{eqn:epsilon}) as a free parameter (solid) or fixed at $\epsilon=0$ (dashed)  (d) $\Theta$ grows with DC current through the QPC heater. A fit to $T = a\sqrt{T^{2}_{MC}+b I^2_{heat}R_{QPC}}$ is used to convert between $I_{heat}$ and $\delta T$ \cite{Mittal1996} (e)  Entropy measurements were independent of the magnitude of $I_{heat}$ oscillations. Top axis illustrates the corresponding magnitude of $\delta T$, while right axes shows the entropy signal converted to a gate voltage shift.}
+\end{figure}
+
+To proceed with the entropy measurement, the dot was tuned such that the source was weakly tunnel coupled to the reservoir with the drain closed.  The conductance of the charge sensor was tuned to $g_{sens}{\sim}e^2/h$, where it was most sensitive to charge on the dot.  The addition of the first electron to the dot was marked by a decrease in $g_{sens}$ that is well fit by the form for a thermally-broadened two-level transition (Fig.~\ref{fig:fig2}a):
+%
+\begin{align}
+\label{eqn:g-sens}
+        g_{sens}(V,\Theta) &= G_0 \tanh\left(\frac{V-V_{mid}(\Theta)}{2\Theta}\right)  \\
+                        &\quad + G_1\left[V-V_{mid}(\Theta)\right] + G_2 \nonumber
+\end{align}
+%
+where $G_0$ quantifies the sensor sensitivity, $\Theta = \frac{k_B T}{\alpha e}$ is the thermal broadening (expressed in units of gate voltage), $\alpha\equiv d \mu_{N}/d V_G$ is the lever arm, and $G_1$ reflects the cross capacitance between the charge sensor and plunger gate. Figure~\ref{fig:fig2}a shows two such transition curves with thermal broadening determined by the current, $I_{heat}$ through the heater. With no Joule heating through the heater, $\Theta$ followed $T_{MC}$ down to \SI{<100}{\milli\kelvin} (Fig.~\ref{fig:fig2}b), validating the approximation of thermal broadening used throughout this experiment.
+
+The data in Fig.~\ref{fig:fig2}c, and corresponding fits, illustrate an example of how $\Delta S_{0\rightarrow 1}$ was measured across the $0 \rightarrow 1$ electron transition.  A comparison of the curves in Fig.~\ref{fig:fig2}a shows that $g_{sens}$ drops as temperature rises immediately before the midpoint of the transition ($V_G-V_{mid}<0$), whereas $g_{sens}$ rises with temperature for $V_G-V_{mid}>0$.   Oscillating the reservoir temperature by $\delta T$ using an AC current through the heater while measuring oscillations in the charge sensor signal, $\delta g_{sens}$, with a lock-in amplifier (see Methods) yields the characteristic peak-dip structure seen in Fig.~\ref{fig:fig2}c. The expected lineshape of such a curve is given by $\delta g_{sens} = \frac{\partial g_{sens}}{\partial T} \delta T$, where $g_{sens}$ is defined by Eq. \ref{eqn:g-sens}:
+%
+\begin{align}
+\label{eqn:dg-sens}
+        \delta g_{sens}(V_G, \Theta) &\propto -\delta T \left[ \frac{V_G-V_{mid}(\Theta)}{2\Theta} + \frac{\epsilon}{2} \right]\times \\
+        				      &\quad\cosh^{-2}\left(\frac{V_G-V_{mid}(\Theta)}{2\Theta}\right) + const. \nonumber
+\end{align}
+%
+where $\epsilon=\frac{\partial V_{mid}}{\partial \Theta}$. Using the lever arm to convert $V_{mid}$ to electrochemical potential, $\epsilon$ is simply the change in entropy (scaled by $k_B$) through Eq.~\ref{eqn:max}:
+%
+\begin{align}
+\label{eqn:epsilon}
+        \epsilon &= \frac{\partial V_{mid}}{\partial \Theta} = 
+        \frac{1}{k_B} \frac{\partial \mu}{\partial T} = 
+        -\frac{1}{k_B} \Delta S_{N-1\rightarrow N}
+\end{align}
+%
+From Eqs.~\ref{eqn:dg-sens} and \ref{eqn:epsilon}, $\delta g_{sens}(V_G)$ would be perfectly antisymmetric around $V_{mid}$ if $\Delta S_{N-1\rightarrow N}$ were zero, whereas the data in Fig.~\ref{fig:fig2}c are clearly not antisymmetric. A best fit to Eqs.~\ref{eqn:dg-sens} and \ref{eqn:epsilon} yields $\Delta S_{0\rightarrow 1}=(1.02 \pm 0.03) k_B \ln{2}$. For the $0 \rightarrow 1$ electron transition, at zero magnetic field, $g_0=1$ giving $S_0=k_B \ln{1}=0$ and $g_1=2$ so $S_1=k_B \ln{2}$, giving $\Delta S_{0 \rightarrow 1} = S_1 - S_0 =k_B\ln{2}$.
+
+Figure~\ref{fig:fig2}e shows that $\Delta S$, determined from fits analogous to those in Fig.~\ref{fig:fig2}c, remains constant over a range of $\delta T$ ($I_{heat}$ AC). The calibration for $\delta T$ with respect to $I_{heat}$ is shown in Fig.~\ref{fig:fig2}d; a DC heater current was applied and fits to Eq.~\ref{eqn:g-sens} yield $\delta T$ through $\Theta$; the calibration holds for AC currents when referring to the RMS value of $I_{heat}$ AC, as we do throughout this discussion. The parameter $\epsilon$ is entirely determined by the asymmetry of $\delta g$ as a function of $V_G$, as seen in Eqs.~\ref{eqn:dg-sens} and \ref{eqn:epsilon}, ad no further calibration is necessary for the entropy measurement. Figure~\ref{fig:fig2} shows that, as long as $\delta T$ is small enough to not excite any orbital levels on the dot, the measured entropy is independent of $T$.
+
+%%% figure 3 %%%
+\begin{figure}
+        \includegraphics[width=1.0\columnwidth]{../figures/figure_3.pdf}
+        \caption{\label{fig:fig3}(a) Changes in entropy for $N=0 \rightarrow 1$ and $2 \rightarrow 3$ transitions, overlaid to highlight similar behaviors.  Each data point corresponds to a single $\delta g_{sens}(V_G)$ fit; multiple scans are carried out at various parallel magnetic fields.   (b) and (c) Characteristic $\delta g_{sens}$ traces from which the data in (a) were extracted. The two data points corresponding to (b) and (c) are shown as large markers in (a). (e) Bias spectroscopy data for the $N=0 \rightarrow 1$ transition. Dashed line at $V_{SD}$ = \SI{700}{\micro\electronvolt} shows where data in (f) are taken. (f) Fixed bias data showing fits to Zeeman splitting of the ground state (dashed lines) from which $g = -0.42 \pm 0.01$ is extracted.}
+\end{figure}
+
+Confirmation that the measured $\Delta S$ derives from spin degeneracy can be seen through its evolution with in-plane magnetic field, $B_\parallel$. Figure \ref{fig:fig3}a compares $\Delta S(B_\parallel)$ for the $0 \rightarrow1 $ and $2 \rightarrow 3$, both of which correspond to transitions from total spin zero to total spin one-half. The entropies of the $\ket{S=1/2}$ states are suppressed when Zeeman splitting lifts the spin degeneracy. This behavior is described by the Gibbs entropy for a two-level system:
+%
+\begin{align}
+\label{eqn:gibbs}
+        S &= k_B \sum_{i=\pm} p_{i}(B_\parallel, T) \ln{ p_{i}(B_\parallel,T) }
+\end{align}
+%
+where $p_{\pm}(B_\parallel, T) = (1+ e^{\mp \frac{g\mu_B B_{\parallel}}{k_B T}})^{-1}$ are the probabilities for the unpaired electron to be in the spin up/down states at a given field and temperature. Fits to Eq.~\ref{eqn:gibbs} are shown in Fig.~\ref{fig:fig3}a, with the ratio $g/T$ and an added scaling $\Delta S(B=0)$ as free parameters.
+
+%%% changes in here %%%
+The entropy measurements yield $\Delta S_{0 \rightarrow 1}=(0.94 \pm 0.03) k_B \ln{2}$ and $\Delta S_{2 \rightarrow 3}=(0.98 \pm 0.02) k_B \ln{2}$ at zero magnetic field, collapsing to zero at high field where spin degeneracy is broken.  
+
+% discuss below why g may be wrong due to inaccuracies in T measurement, but that this in no way affects the entropy measurement, which is our focus
+Choosing $T$ to be midway between the low ($T_{MC}$) and high ($T_{MC}+\delta T$) points of the temperature oscillation for each data set yields $g=-0.48 \pm 0.02$ and $g=-0.44 \pm 0.01 $ for the $0\rightarrow 1$ and $2\rightarrow 3$ transitions, respectively. These are consistent with previous few electron dot measurements and the value measured separately in Fig.~\ref{fig:fig3}e using bias spectroscopy \cite{Cronenwett1998,Hanson2003,Zumbuhl2004}.
+
+% move some discussion from figure 3 caption down to here emphasize what you can see from just a quick look at the curves in figs b and c
+At a qualitative level, Figs.~\ref{fig:fig3}b and c show $\delta g_{sens}$ crossover from asymmetric to antisymmetric as $\Delta S$ goes to zero at high field.
+%%%%%%%%%%%%%%%
+
+
+%%% figure 4 %%%
+\begin{figure}
+        \includegraphics[width=1.0\columnwidth]{../figures/figure_4.pdf}
+        \caption{\label{fig:fig4}(a) Change in entropy, extracted from $\delta g_{sens}$ fits at varying parallel field. Dashed line shows fit to Eq.~\ref{eqn:gibbs}. Values stated for $\Delta S$ are with respect to the vertical offset apparent in the data. (b), (c), and (d) show characteristic $\delta g_{sens}$ traces from which the data in (a) were extracted. These data points are show as large markers in (a). (e) Bias spectroscopy data for the $N=1 \rightarrow 2$ transition. Transitions to the 2-electron triplet state correspond to the lines appearing at $V_{SD} = \SI{\pm 320}{\micro\electronvolt}$. Dashed line at $V_{SD}$ = \SI{1250}{\micro\electronvolt} shows where data in (f) are taken. (f) Fixed bias data in parallel field. Triplet level is split into $\ket{T_+}$ and $\ket{T_0}$ levels with a third $\ket{T_-}$ level not visible here. At \SI{8.4}{\tesla} $\ket{T_+}$ becomes degenerate with $\ket{S}$. $g=-0.40\pm0.04$ is determined using $\ket{T_0}$ and $\ket{T_+}$ fits (dashed).}
+\end{figure}
+
+%%%%%%%%%%%%%
+The $1\rightarrow 2$ transition can be understood as the inverse of the $0 \rightarrow 1$ transition aor $B_\parallel < \SI{5}{\tesla}$ (comparing Figs~\ref{fig:fig3}a and \ref{fig:fig4}a). 
+
+% clear this up and make more reference to entropy
+There, the 2-electron ground state remains a spin singlet $\ket{S_2=0}$ while the 1-electron ground state entropy goes from $k_B\ln{2}$ to zero due to Zeeman splitting. 
+At higher field, the 1-electron ground state remains non-degenerate $\ket{S_1=0}$ while the 2-electron ground state becomes two-fold degenerate where the spin singlet $\ket{S}$ and triplet $\ket{T_+}$ states cross. 
+
+The singlet-triplet crossing is seen clearly at \SI{8.4}{\tesla} in bias spectroscopy data for the $1\rightarrow 2$ transition (Fig.~\ref{fig:fig4}f). 
+%%%%%%%%%%%%%%
+
+The field-dependent entropy measurement for the 1-2 transition can again be fit using Eq.~\ref{eqn:gibbs}, with probabilities as before for the 1-electron states and $p_{S/T}(B_\parallel, T) = (1+ e^{\mp \frac{g\mu_B B_\parallel - \Delta_{ST}}{k_B T}})^{-1}$ for the 2-electron states, where $\Delta_{ST}$ is the singlet-triplet splitting at zero field. The fit allows for an offset from $\Delta S=0$, away from the degenerate points, to compensate for non-linearities in the charge sensor. From this we find $\Delta S$ at the two-fold degenerate points, $B=0$ and \SI{9}{\tesla}, are $-(1.01\pm0.03) k_B \ln{2}$ and $(1.04 \pm 0.04) k_B \ln{2}$, respectively. % The discrepancy between the ST degenerate points in 4a and 4f can be explained by the change in dot configuration from one to two open tunnel barriers.
+The extracted value of $g = 0.47 \pm 0.02$ from the low-field peak agrees well with the expected value and the bias spectroscopy data in Fig.~\ref{fig:fig4}f. At the high-field singlet-triplet degeneracy we find $g = 0.69 \pm 0.04$. This unexpectedly high g-factor can be explained by a shifting of the $\ket{T_0}$ state with magnetic field, as seen in Fig.~\ref{fig:fig4}f and previous work \cite{Szafran2004}. 
+%%%%%
+The high quality of the Gibbs entropy fit, over a large range of field, confirms the measured signal is the change in entropy $\Delta S$, as described above, and illustrates a tunable degeneracy in the system.
+%%%%%
+
+%%% conclusion %%%
+In conclusion, have presented a direct entropy measurement of the few-particle states in mesoscopic devices can be measured directly. The spin entropy of the well understood few electron states in a GaAs was quantified within 5\% of the expected $k_B \ln{2}$.  Future work may take advantage of this strategy to search for thermodynamic signatures of quantum states with non-trival correlations or topology, eliminating the uncertainty found in typical transport data.
+
+\paragraph*{Methods} The device was built on a AlGaAs/GaAs heterostructure, hosting a 2D electron gas with density and mobility at \SI{300}{\milli\kelvin} (determined in a separate chip/measurement) of \SI{2.42e11}{\per\square\centi\metre} and \SI[per-mode=symbol]{2.56e6}{\square\centi\metre\per\volt\per\second} respectively.   Mesas and NiAuGe ohmic contacts to the 2DEG were defined by standard photolithography techniques, followed by atomic layer deposition of \SI{10}{\nano\metre} $\mathrm{HfO_2}$ to improve the gating stability in the device. Fine gate structures, shown in Fig.~\ref{fig:fig1}a, were defined by electron beam lithography and deposition of \SI{3/18}{\nano\metre} Ti/Au. 
+
+The measurement was carried out in a dilution refrigerator with a two-axis magnet. The sample was aligned parallel to the main axis. and the second axis could be used to compensate for sample misalignment. In practice, perpendicular fields up to \SI{100}{\milli\tesla} showed no affect on our results. The conductance of the charge sensor was measured using a DC voltage bias of \SI{200}{\micro\volt}, with the current read out directly or fed into a lock-in amplifier.  The temperature of the reservoir could be raised above $T_{MC}$ using AC or DC current biased through the heater QPC, which was gate-tuned to \SI{20}{\kilo\ohm}. Applying AC current at $f_{heat} =$ \SI{48.7}{\hertz} yields an oscillating Joule power, $P_{heat} = I^2_{heat}R_{QPC}$. To leading order this gives oscillations in temperature, and therefore $g_{sens}$, at $2f_{heat}$ which are captured with a lock-in amplifier. Measurements of $\Delta S$ are made at $\delta T \sim $ \SI{60}{\milli\kelvin}.
+
+The transition width, $\Theta$, extracted from fits to Eq.~\ref{eqn:g-sens} was found to follow the mixing chamber temperature, $T_{MC}$, to \SI{<100}{\milli\kelvin} (Fig.~\ref{fig:fig2}b). The assumption of thermally broadened transitions greatly simplifies the data analysis, so $T_{MC}$ is fixed at \SI{100}{\milli\kelvin} for most of this work, using Joule heating to raise $T$ up to \SI{250}{\milli\kelvin}. 
+
+\acknowledgments
+The authors would like to acknowledge John Martinis for a helpful discussion on the interpretation of our measurements.
+
+\bibliography{qdentropy}{}
+\bibliographystyle{apsrev4-1}
+
+\end{document}
+
+%%% old abstract %%%
+
+%\begin{abstract}
+%
+%Measuring the entropy of an electronic state is a powerful tool for identifying its underlying microscopic character.  Such measurements are typically based on bulk properties, such as heat capacity, that are straightforward to observe in macroscopic samples but exceedingly difficult to access in mesoscopic systems that may consist of just a few electrons. Taking advantage of a well-known Maxwell relation, we realize a protocol for entropy-to-charge conversation in a gate-defined GaAs quantum dot that enables an entropy measurement of the first three quantum states in to the dot. The entropy of a single spin ($k_B \ln{2}$) is measured within 8\% accuracy, as is the entropy arising at the magnetic field-driven singlet-triplet crossing for two electrons.
+%
+%\end{abstract}
+
+%%% old sentences %%%
+
+%Similarly, the two-channel Kondo state that is believed to arise in carefully tuned GaAs devices has so far been identified through a particular temperature dependence in the device conductance \cite{Potok2007}. A more direct test for the two-channel Kondo state would be a confirmation of its entropy ($\frac{1}{2} k_B \ln{2}$), that should remain down to arbitrarily low temperatures \cite{Alkurtass2016}.
+
+%Entropy can be probed effectively in 3D macroscopic samples via measurements of heat capacity, but the heat capacities of single electrons or quasiparticles are much too small to measure directly; even the 2D sheet of quasiparticles in $\nu = \frac{5}{2}$ fractional quantum Hall samples has a heat capacity that vanishes in comparison to that of the host crystal.  Rather than attempt to resolve such infinitesimal signals, the problem can be avoided by converting changes in entropy to changes in charge \textemdash a quantity that is easily detected at the single particle level.
+
+%Unlike the $\nu = \frac{5}{2}$ quasiparticles described in the theoretical work, the few-electron quantum dot states investigated here have an entropy that is well-understood from the spin degree of freedom \cite{Tarucha1996, Ciorga2000, Duncan2000, Lindemann2002, Potok2003, Hofmann2016}.  
+
+%This shift, $\delta \mu$ as a function of $\delta T$, is the quantity probed directly in the experiment described below. From these measurements the entropies of the first three quantum dot levels are built up, demonstrating a direct entropy measurement is possible on a few-particle system. In the future, the method can be utilized to probe the nature of more exotic systems, such as topologically non-trivial Majorana and other non-Abelian states. 
+
+%Consider the filling of the first electron state, which has a single, unpaired spin-$\frac{1}{2}$ and, therefore, a degeneracy of 2.
+
+%One expects identical field-dependent behaviors for $\Delta S_{0\rightarrow 1}$ and $\Delta S_{2\rightarrow 3}$ as long as $g \mu_{B} B_\parallel$ is less than the excited state energies
+
+%The transition width, $\Theta$, extracted from fits to Eq.~\ref{eqn:g} follows the mixing chamber temperature, $T_{MC}$, to \SI{<100}{\milli\kelvin} (Fig.~\ref{fig:fig2}b). The assumption of thermally broadened transitions greatly simplifies the data analysis, so $T_{MC}$ is fixed at \SI{100}{\milli\kelvin} for most of this work, using Joule heating to raise $T$ up to \SI{250}{\milli\kelvin}. Measurements of $\Delta S$ are made at $\delta T = $ \SI{60}{\milli\kelvin} such that no orbital levels above the ground state were excited.
+
+%Although the extracted $\epsilon$ can be converted to gate-voltage-per-temperature units using a value for $\alpha$ measured separately (right axis of Fig.~\ref{fig:fig2}e), the entropy itself, $\Delta S$, is determined directly from the fit to $\delta g_{sens}$ without any additional calibration, and without knowing the precise value of $\delta T$.
+
