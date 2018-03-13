@@ -1,13 +1,17 @@
 # ignore LaTeX directory
-paper/*.bbl
-paper/*.blg
-paper/*.log
-paper/*.pdf
-paper/*.gz
-paper/*.out
-paper/*.aux
-paper/.texpadtmp
-paper/draftNotes.bib
+# paper/*.bbl
+# paper/*.blg
+# paper/*.log
+# paper/*.pdf
+# paper/*.gz
+# paper/*.out
+# paper/*.aux
+# paper/.texpadtmp
+# paper/draftNotes.bib
+
+# ignore paper drafts
+paper/
+submission/
 
 # dropbox
 .dropbox
