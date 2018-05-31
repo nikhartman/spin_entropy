@@ -12,6 +12,8 @@
 # ignore paper drafts
 paper/
 submission/
+response_letter/
+final_submission/
 
 # dropbox
 .dropbox
